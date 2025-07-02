@@ -1,5 +1,6 @@
 #include <image.h>
 
+#include <QColorSpace>
 #include <QImage>
 #include <QPainter>
 #include <QQuickItem>
@@ -15,6 +16,9 @@ void Image::setSource(const QString &source) {
 
     this->source = source;
     image = QImage(source);
+    QColorSpace colorSpace = image.colorSpace();
+    if (colorSpace.isValid())
+        image.applyColorTransform(colorSpace.transformationToColorSpace(QColorSpace(QColorSpace::SRgb)));
     scaledImage = image;
     update(QRect(0, 0, width(), height()));
 
