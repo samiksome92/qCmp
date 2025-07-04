@@ -56,22 +56,20 @@ void Image::paint(QPainter *painter) {
     int tH = height() - 2 * padding;
     double tAr = static_cast<double>(tW) / tH;
 
-    int x = 0;
-    int y = 0;
     bool applyMask = false;
     if (ar <= tAr) {
-        if (scaledImage.height() != tH) {
+        if (scaledImage.height() > tH) {
             scaledImage = image.scaledToHeight(tH, Qt::SmoothTransformation);
             applyMask = true;
         }
-        x = (tW - scaledImage.width()) / 2;
     } else {
-        if (scaledImage.width() != tW) {
+        if (scaledImage.width() > tW) {
             scaledImage = image.scaledToWidth(tW, Qt::SmoothTransformation);
             applyMask = true;
         }
-        y = (tH - scaledImage.height()) / 2;
     }
+    int x = (tW - scaledImage.width()) / 2;
+    int y = (tH - scaledImage.height()) / 2;
 
     // Only apply radius mask if scaled image has changed and radius is greater than zero.
     if (radius > 0 && applyMask) {
